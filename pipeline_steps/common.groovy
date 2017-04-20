@@ -3,7 +3,8 @@ import groovy.json.JsonOutput
 
 // Install ansible on a jenkins slave
 def install_ansible(){
-  sh """#!/bin/bash
+  sh """#!/bin/bash -xe
+    cd ${env.WORKSPACE}
     if [[ ! -d ".venv" ]]; then
       if ! which virtualenv; then
         pip install virtualenv
@@ -24,10 +25,13 @@ def install_ansible(){
     pip install -U six packaging appdirs
     pip install -U setuptools
     pip install 'pip==9.0.1'
-    pip install -c ${env.WORKSPACE}/rpc-gating/constraints.txt -U ansible pyrax
+    pip install \
+      -U \
+      -c rpc-gating/constraints.txt \
+      -r rpc-gating/requirements.txt
 
     mkdir -p rpc-gating/playbooks/roles
-    ansible-galaxy install -r ${env.WORKSPACE}/rpc-gating/role_requirements.yml -p ${env.WORKSPACE}/rpc-gating/playbooks/roles
+    ansible-galaxy install -r rpc-gating/role_requirements.yml -p rpc-gating/playbooks/roles
   """
 }
 
