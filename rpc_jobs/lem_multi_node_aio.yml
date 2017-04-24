@@ -59,13 +59,22 @@
           TESTR_OPTS: ""
       - string:
           name: STAGES
-          default: "Connect Slave, Prepare Multi-Node AIO, Prepare RPC Configs, Deploy RPC w/ Script, Destroy Slave"
+          default: |
+            Connect Slave,
+            Prepare Multi-Node AIO,
+            Prepare RPC Configs,
+            Deploy RPC w/ Script,
+            Prepare MaaS,
+            Setup MaaS,
+            Verify MaaS,
+            Destroy Slave
           description: |
             Pipeline stages to run CSV. Note that this list does not influence execution order.
             Options:
               Connect Slave
               Prepare Deployment
               Deploy RPC w/ Script
+              Prepare MaaS
               Setup MaaS
               Verify MaaS
               Install Tempest
