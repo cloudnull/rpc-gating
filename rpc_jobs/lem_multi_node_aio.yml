@@ -6,12 +6,15 @@
       - mitaka:
           branch: mitaka-13.1
           OPENSTACK_ANSIBLE_BRANCH: "stable/mitaka"
+          TEST_SET: "scenario defcore api heat_api smoke"
       - newton:
           branch: newton-14.0
           OPENSTACK_ANSIBLE_BRANCH: "stable/newton"
+          TEST_SET: "all"
       - master:
           branch: master
           OPENSTACK_ANSIBLE_BRANCH: "stable/newton"
+          TEST_SET: "all"
     context:
       - trusty:
           DEFAULT_IMAGE: "14.04.5"
@@ -37,7 +40,7 @@
     # TEMPLATE
     name: 'LEM-Multi-Node-AIO_{series}-{context}-{ztrigger}'
     project-type: workflow
-    concurrent: false
+    concurrent: true
     properties:
       - build-discarder:
           num-to-keep: "{NUM_TO_KEEP}"
@@ -54,9 +57,9 @@
       - rpc_repo_params:
           RPC_BRANCH: "{branch}"
       - tempest_params:
-          TEMPEST_TEST_SETS: "scenario defcore cinder_backup"
-          RUN_TEMPEST_OPTS: "--serial"
-          TESTR_OPTS: ""
+          TEMPEST_TEST_SETS: "{TEST_SET}"
+          RUN_TEMPEST_OPTS: ""
+          TESTR_OPTS: "--concurrency 3"
       - string:
           name: STAGES
           default: "Connect Slave, Prepare LEM AIO, Prepare Multi-Node AIO, Prepare RPC Configs, Deploy RPC w/ Script, Install Tempest, Tempest Tests, Prepare Kibana Selenium, Kibana Tests, Holland, Destroy Slave"
